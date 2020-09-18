@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="wsdl-first"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://ws.dhdigital.co.service"
+	xmlns:typens="http://ws.dhdigital.co.service/types"
+	targetNamespace="http://ws.dhdigital.co.service">
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://ws.dhdigital.co.service/types">
+			<xsd:element name="CalculatorRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="operation" type="xsd:string" />
+						<xsd:element name="num1" type="xsd:double" />
+						<xsd:element name="num2" type="xsd:double" />
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CalculatorResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="remarks" type="xsd:string" />
+						<xsd:element name="result" type="xsd:double" />
+
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="error">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" name="reason"
+							type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="CalculatorRequest">
+		<wsdl:part name="request" element="typens:CalculatorRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="CalculatorResponse">
+		<wsdl:part name="response"
+			element="typens:CalculatorResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="ErrorMessage">
+		<wsdl:part name="error" element="typens:error" />
+	</wsdl:message>
+
+	<wsdl:portType name="Calculator">
+		<wsdl:operation name="calculate">
+			<wsdl:input message="tns:CalculatorRequest" />
+			<wsdl:output message="tns:CalculatorResponse" />
+			<wsdl:fault name="error" message="tns:ErrorMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="CalculatorSOAPBinding"
+		type="tns:Calculator">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="calculate">
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="error">
+				<soap:fault name="error" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="CalculatorService">
+		<wsdl:port binding="tns:CalculatorSOAPBinding"
+			name="CalculatorPort">
+			<soap:address
+				location="http://localhost:8080/calculatorService" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
+    

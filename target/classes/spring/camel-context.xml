@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd         http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <bean
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="bean-68184f7e-64d9-46b8-95cc-0008b81008b7"/>
+    <bean class="org.mycompany.services.CalculationService" id="calculationService"/>
+    <bean class="org.mycompany.processors.CalculatorRestProcessor" id="calculatorRestProcessor"/>
+    <camelContext id="camelContext-9d7bf64c-79fb-4d05-bdc2-600f35454b8d" xmlns="http://camel.apache.org/schema/spring">
+        <dataFormats>
+            <xmljson id="xmljson"/>
+        </dataFormats>
+        <restConfiguration bindingMode="json" component="jetty"
+            host="localhost" port="8081"/>
+        <rest id="id-6365bb7b-8ab0-4118-97ee-da44deb2bdaf" path="/api/v1">
+            <get id="id-dcef0558-edcf-421f-8f31-869c38caf7cb"
+                outType="service.co.dhdigital.ws.types.CalculatorResponse"
+                type="service.co.dhdigital.ws.types.CalculatorRequest" uri="/calculatorservice">
+                <to uri="direct:httpRoute"/>
+            </get>
+        </rest>
+        <route id="wsRoute">
+            <from id="_from1" uri="cxf:bean:calculatorServiceEndpoint"/>
+            <bean id="_bean1" ref="calculationService"/>
+        </route>
+        <route id="httpRoute">
+            <from id="_from2" uri="direct:httpRoute"/>
+            <bean id="_bean2" ref="calculationService"/>
+            <setHeader headerName="Content-Type" id="_setHeader1">
+                <constant>application/json</constant>
+            </setHeader>
+            <setBody id="_setBody1">
+                <simple>${body[0]}</simple>
+            </setBody>
+        </route>
+    </camelContext>
+    <cxf:cxfEndpoint address="http://localhost:8080/calculatorService"
+        id="calculatorServiceEndpoint" serviceClass="service.co.dhdigital.ws.Calculator"/>
+</beans>

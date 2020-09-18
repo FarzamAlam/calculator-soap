@@ -1,0 +1,11 @@
+service\co\dhdigital\ws\types\CalculatorResponse.class
+service\co\dhdigital\ws\ErrorMessage.class
+service\co\dhdigital\ws\Calculator.class
+org\mycompany\processors\CalculatorRestProcessor.class
+service\co\dhdigital\ws\types\CalculatorRequest.class
+service\co\dhdigital\ws\CalculatorService.class
+org\mycompany\Application.class
+service\co\dhdigital\ws\types\package-info.class
+service\co\dhdigital\ws\types\ObjectFactory.class
+org\mycompany\services\CalculationService.class
+service\co\dhdigital\ws\types\Error.class
